@@ -248,11 +248,11 @@ int main(int argc, char *argv[])
     TESTSUITE(wsl_tests);
     TESTSUITE(volpath_tests);
 
-    SymInitialize(GetCurrentProcess(), 0, TRUE);
+    //SymInitialize(GetCurrentProcess(), 0, TRUE);
 
     atexit(exiting);
     signal(SIGABRT, abort_handler);
-    SetUnhandledExceptionFilter(UnhandledExceptionHandler);
+    //SetUnhandledExceptionFilter(UnhandledExceptionHandler);
 
     for (int argi = 1; argc > argi; argi++)
     {
