@@ -63,7 +63,8 @@ test_script:
 - if exist %SystemRoot%\memory.dmp exit 1
 
 on_finish:
-- if exist %SystemRoot%\memory.dmp (7z a memory.dmp.zip %SystemRoot%\memory.dmp && appveyor PushArtifact memory.dmp.zip)
-- dir /a/b C:\projects\LocalDumps | findstr "^" && (7z a LocalDumps.zip C:\projects\LocalDumps && appveyor PushArtifact LocalDumps.zip) || ver>nul
+- if exist %SystemRoot%\memory.dmp (7z a km.dmp.zip %SystemRoot%\memory.dmp && appveyor PushArtifact km.dmp.zip)
+- dir /a/b C:\projects\LocalDumps | findstr "^" && (7z a um.dmp.zip C:\projects\LocalDumps && appveyor PushArtifact um.dmp.zip) || ver>nul
+- if exist *.dmp.zip (7z a sym.pdb.zip build\VStudio\build\%CONFIGURATION%\*.pdb && appveyor PushArtifact sym.pdb.zip)
 - verifier /query
 #- ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
