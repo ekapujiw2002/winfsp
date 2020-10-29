@@ -1,6 +1,8 @@
 version: '{build}'
 
 environment:
+  # Disable the winfsp-tests built-in exception filter to allow WER to collect dumps.
+  WINFSP_TESTS_EXCEPTION_FILTER_DISABLE: 1
   matrix:
   - CONFIGURATION: Debug
     TESTING: Func
@@ -60,11 +62,11 @@ test_script:
 - if %TESTING%==Avast tools\run-tests.bat %CONFIGURATION% avast-tests
 - if %TESTING%==Perf tools\run-perf-tests.bat %CONFIGURATION% baseline > perf-tests.csv && type perf-tests.csv & appveyor PushArtifact perf-tests.csv
 - choco uninstall winfsp -y
-- if exist %SystemRoot%\memory.dmp exit 1
 
 on_finish:
+- verifier /query
 - if exist %SystemRoot%\memory.dmp (7z a km.dmp.zip %SystemRoot%\memory.dmp && appveyor PushArtifact km.dmp.zip)
 - dir /a/b C:\projects\LocalDumps | findstr "^" && (7z a um.dmp.zip C:\projects\LocalDumps && appveyor PushArtifact um.dmp.zip) || ver>nul
 - if exist *.dmp.zip (7z a sym.pdb.zip build\VStudio\build\%CONFIGURATION%\*.pdb && appveyor PushArtifact sym.pdb.zip)
-- verifier /query
+- if exist *.dmp.zip exit 1
 #- ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
