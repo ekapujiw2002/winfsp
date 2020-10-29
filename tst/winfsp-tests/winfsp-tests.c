@@ -248,11 +248,13 @@ int main(int argc, char *argv[])
     TESTSUITE(wsl_tests);
     TESTSUITE(volpath_tests);
 
-    //SymInitialize(GetCurrentProcess(), 0, TRUE);
+    SymInitialize(GetCurrentProcess(), 0, TRUE);
 
     atexit(exiting);
     signal(SIGABRT, abort_handler);
-    //SetUnhandledExceptionFilter(UnhandledExceptionHandler);
+#pragma warning(suppress: 4996)
+    if (0 == getenv("WINFSP_TESTS_EXCEPTION_FILTER_DISABLE"))
+        SetUnhandledExceptionFilter(UnhandledExceptionHandler);
 
     for (int argi = 1; argc > argi; argi++)
     {
